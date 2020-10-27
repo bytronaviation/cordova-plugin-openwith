@@ -60,6 +60,7 @@
  */
 
 static NSDictionary* launchOptions = nil;
+bool initialized = false;
 
 /*
  * OpenWithPlugin definition
@@ -214,6 +215,16 @@ static NSDictionary* launchOptions = nil;
     [self.userDefaults synchronize];
     NSObject *object = [self.userDefaults objectForKey:@"image"];
     if (object == nil) {
+        if (initialized) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"File size must be less than 4MB"
+                message:@"The file you have shared is too big. If you see this message again, please restart the app."
+                delegate:self
+                cancelButtonTitle:@"OK"
+                otherButtonTitles:nil];
+            [alert show];
+        }
+        initialized = true;
+        
         [self debug:@"[checkForFileToShare] Nothing to share"];
         return;
     }
